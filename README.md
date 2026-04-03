@@ -1,2 +1,10 @@
-# product-management
-Full Stack Intern Assessment - Product Management using Next.js and Tailwind CSS
+# Product Management App
+
+Full Stack Intern Assessment Project
+
+## Tech Stack
+- Next.js
+- Tailwind CSS
+
+## Status
+🚧 In Progress
