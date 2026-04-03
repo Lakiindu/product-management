@@ -7,4 +7,4 @@ Full Stack Intern Assessment Project
 - Tailwind CSS
 
 ## Status
-🚧 In Progress
+🚧 In Progresss
