@@ -8,6 +8,7 @@ import { getProducts, saveProducts } from "./lib/storage";
 
 export default function Home() {
   const [products, setProducts] = useState<Product[]>([]);
+  const [editingProduct, setEditingProduct] = useState<Product | null>(null);
 
   useEffect(() => {
     setProducts(getProducts());
@@ -17,8 +18,13 @@ export default function Home() {
     saveProducts(products);
   }, [products]);
 
-  const addProduct = (product: Product) => {
-    setProducts([...products, product]);
+  const saveProduct = (product: Product) => {
+    if (editingProduct) {
+      setProducts(products.map((p) => (p.id === product.id ? product : p)));
+      setEditingProduct(null);
+    } else {
+      setProducts([...products, product]);
+    }
   };
 
   const deleteProduct = (id: string) => {
@@ -26,16 +32,34 @@ export default function Home() {
   };
 
   return (
-    <main className="min-h-screen bg-gray-100 p-6">
-      <h1 className="text-3xl font-bold text-center mb-6">
-        Product Management Dashboard 🚀
+    <main className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black p-6 text-white">
+      
+      {/* 🔥 HEADER */}
+      <h1 className="text-4xl font-extrabold text-center mb-10 tracking-wide">
+        Product Dashboard 🚀
       </h1>
 
-      <div className="max-w-xl mx-auto">
-        <ProductForm onAdd={addProduct} />
+      {/* 🔥 FORM CARD (GLASS) */}
+      <div className="max-w-4xl mx-auto mb-10">
+        <div className="bg-white/10 backdrop-blur-lg border border-white/20 rounded-2xl p-6 shadow-xl">
+          <ProductForm 
+            onSave={saveProduct} 
+            editingProduct={editingProduct} 
+          />
+        </div>
       </div>
 
-      <ProductList products={products} onDelete={deleteProduct} />
+      {/* 🔥 LIST CARD (GLASS WRAPPER) */}
+      <div className="max-w-6xl mx-auto">
+        <div className="bg-white/5 backdrop-blur-lg border border-white/10 rounded-2xl p-6 shadow-lg">
+          <ProductList
+            products={products}
+            onDelete={deleteProduct}
+            onEdit={setEditingProduct}
+          />
+        </div>
+      </div>
+
     </main>
   );
 }
