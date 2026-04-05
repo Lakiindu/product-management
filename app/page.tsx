@@ -5,10 +5,13 @@ import ProductForm from "./components/ProductForm";
 import ProductList from "./components/ProductList";
 import { Product } from "./types/product";
 import { getProducts, saveProducts } from "./lib/storage";
+import { Toaster, toast } from "react-hot-toast";
 
 export default function Home() {
   const [products, setProducts] = useState<Product[]>([]);
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
+  const [search, setSearch] = useState("");
+  const [dark, setDark] = useState(true); // 🌙 DARK MODE
 
   useEffect(() => {
     setProducts(getProducts());
@@ -22,44 +25,89 @@ export default function Home() {
     if (editingProduct) {
       setProducts(products.map((p) => (p.id === product.id ? product : p)));
       setEditingProduct(null);
+      toast.success("Product updated!");
     } else {
       setProducts([...products, product]);
+      toast.success("Product added!");
     }
   };
 
   const deleteProduct = (id: string) => {
     setProducts(products.filter((p) => p.id !== id));
+    toast.success("Product deleted!");
   };
 
+  const filteredProducts = products.filter((p) =>
+    p.name.toLowerCase().includes(search.toLowerCase())
+  );
+
   return (
-    <main className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black p-6 text-white">
-      
+    <main
+      className={`relative min-h-screen p-6 transition-all duration-300 ${
+        dark
+          ? "bg-gradient-to-br from-gray-900 via-gray-800 to-black text-white"
+          : "bg-gray-100 text-black"
+      }`}
+    >
+      {/* ✅ TOASTER */}
+      <Toaster />
+
+      {/* 🌙 TOGGLE BUTTON */}
+      <button
+        onClick={() => setDark(!dark)}
+        className="absolute top-4 right-4 bg-white text-black px-4 py-2 rounded-lg shadow-md hover:scale-105 transition"
+      >
+        {dark ? "☀️ Light" : "🌙 Dark"}
+      </button>
+
       {/* 🔥 HEADER */}
       <h1 className="text-4xl font-extrabold text-center mb-10 tracking-wide">
         Product Dashboard 🚀
       </h1>
 
-      {/* 🔥 FORM CARD (GLASS) */}
+      {/* 🔥 FORM CARD */}
       <div className="max-w-4xl mx-auto mb-10">
-        <div className="bg-white/10 backdrop-blur-lg border border-white/20 rounded-2xl p-6 shadow-xl">
-          <ProductForm 
-            onSave={saveProduct} 
-            editingProduct={editingProduct} 
+        <div
+          className={`rounded-2xl p-6 shadow-xl ${
+            dark
+              ? "bg-white/10 backdrop-blur-lg border border-white/20"
+              : "bg-white border border-gray-200"
+          }`}
+        >
+          <ProductForm
+            onSave={saveProduct}
+            editingProduct={editingProduct}
           />
         </div>
       </div>
 
-      {/* 🔥 LIST CARD (GLASS WRAPPER) */}
+      {/* 🔍 SEARCH */}
+      <div className="max-w-6xl mx-auto mb-4">
+        <input
+          type="text"
+          placeholder="🔍 Search products..."
+          className="w-full p-3 rounded-xl text-black outline-none focus:ring-2 focus:ring-blue-500"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+        />
+      </div>
+
+      {/* 🔥 LIST */}
       <div className="max-w-6xl mx-auto">
-        <div className="bg-white/5 backdrop-blur-lg border border-white/10 rounded-2xl p-6 shadow-lg">
+        <div
+          className={`rounded-2xl p-6 shadow-lg ${
+            dark
+              ? "bg-white/5 backdrop-blur-lg border border-white/10"
+              : "bg-white border border-gray-200"
+          }`}
+        >
           <ProductList
-            products={products}
+            products={filteredProducts}
             onDelete={deleteProduct}
             onEdit={setEditingProduct}
           />
         </div>
       </div>
-
     </main>
   );
 }
