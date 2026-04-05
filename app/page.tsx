@@ -62,7 +62,7 @@ export default function Home() {
 
       {/* 🔥 HEADER */}
       <h1 className="text-4xl font-extrabold text-center mb-10 tracking-wide">
-        Product Dashboard 🚀
+        Product Management Dashboard 🚀
       </h1>
 
       {/* 🔥 FORM CARD */}
@@ -84,12 +84,18 @@ export default function Home() {
       {/* 🔍 SEARCH */}
       <div className="max-w-6xl mx-auto mb-4">
         <input
-          type="text"
-          placeholder="🔍 Search products..."
-          className="w-full p-3 rounded-xl text-black outline-none focus:ring-2 focus:ring-blue-500"
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-        />
+  type="text"
+  placeholder="🔍 Search products..."
+  className={`w-full p-3 rounded-xl outline-none border transition
+    ${
+      dark
+        ? "bg-white/10 text-white placeholder-gray-300 border-white/20 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+        : "bg-white text-black placeholder-gray-500 border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+    }
+  `}
+  value={search ?? ""}
+  onChange={(e) => setSearch(e.target.value)}
+/>
       </div>
 
       {/* 🔥 LIST */}

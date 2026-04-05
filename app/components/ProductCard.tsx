@@ -10,15 +10,17 @@ export default function ProductCard({ product, onDelete, onEdit }: Props) {
   return (
     <div className="bg-white text-black rounded-2xl shadow-md p-4 hover:scale-105 hover:shadow-xl transition duration-300">
       
-      {/* ✅ IMAGE WITH FALLBACK */}
-      <img
-        src={product.image || "https://via.placeholder.com/300"}
-        onError={(e) => {
-          (e.target as HTMLImageElement).src = "https://via.placeholder.com/300";
-        }}
-        className="h-40 w-full object-cover rounded-lg"
-        alt={product.name}
-      />
+      {/* ✅ IMAGE (FULL FIT FIXED) */}
+      <div className="h-44 w-full bg-gray-100 rounded-lg p-2 flex items-center justify-center">
+        <img
+          src={product.image || "https://via.placeholder.com/300"}
+          onError={(e) => {
+            (e.target as HTMLImageElement).src = "https://via.placeholder.com/300";
+          }}
+          className="h-full w-full object-contain"
+          alt={product.name}
+        />
+      </div>
 
       {/* ✅ TITLE */}
       <h2 className="font-bold mt-3 text-lg">{product.name}</h2>
